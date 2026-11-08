@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Build your evaluator list for the Leadership Circle Profile and download it as a CSV file.">
+<meta property="og:title" content="Your LCP evaluators">
+<meta property="og:description" content="Name the people who will give you feedback, then download the list as a file to send back.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231A1A1A'/%3E%3Ccircle cx='11' cy='12' r='3.4' fill='%23fff'/%3E%3Ccircle cx='21' cy='12' r='3.4' fill='%23fff'/%3E%3Cpath d='M4 25c0-4 3.1-6.6 7-6.6s7 2.6 7 6.6z' fill='%23fff'/%3E%3Cpath d='M14 25c0-4 3.1-6.6 7-6.6s7 2.6 7 6.6z' fill='%23fff'/%3E%3C/svg%3E">
+<title>Your LCP evaluators</title>
+<style>
+  :root{
+    --ink:#1A1A1A; --mid:#4A4A4A; --grey:#767676; --hair:#CFCFCF; --hair2:#E6E6E4;
+    --bg:#F4F4F2; --panel:#FFFFFF;
+    --ok:#2E5A46; --warn:#9A3412; --soft:#F7F3EE;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);
+       font-size:15px;line-height:1.5}
+
+  .wrap{max-width:900px;margin:0 auto;padding:28px 20px 120px}
+  .panel{background:var(--panel);border:1px solid var(--hair);padding:22px 26px;margin-bottom:14px}
+
+  h1{margin:0 0 4px;font-size:25px;line-height:1.2}
+  .sub{margin:0 0 16px;font-size:14px;color:var(--mid)}
+  .hr{height:1px;background:var(--ink);margin:14px 0 16px}
+  .panel p{margin:0 0 10px;font-size:14px;color:var(--mid)}
+  .panel p:last-child{margin-bottom:0}
+  .panel b{color:var(--ink)}
+  h2{margin:0 0 12px;font-size:17px}
+
+  .lbl{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+       color:var(--grey);margin-bottom:5px;font-weight:bold}
+  input[type=text],input[type=email],select,textarea{
+    width:100%;font-family:inherit;font-size:15px;color:var(--ink);padding:9px 10px;
+    border:1px solid var(--hair);background:var(--panel);border-radius:0}
+  select{height:38px}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--ink);outline-offset:-2px}
+  input.bad{border-color:var(--warn);background:#FDF5F1}
+
+  .me{display:flex;flex-wrap:wrap;gap:14px;margin-top:18px}
+  .me label{flex:1 1 230px}
+
+  /* ---- evaluator rows ---- */
+  .head{display:grid;grid-template-columns:1fr 190px 1fr 34px;gap:10px;
+        padding:0 0 7px;border-bottom:1px solid var(--ink)}
+  .head span{font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+             color:var(--grey);font-weight:bold}
+  .row{display:grid;grid-template-columns:1fr 190px 1fr 34px;gap:10px;align-items:center;
+       padding:9px 0;border-bottom:1px solid var(--hair2)}
+  .row .clbl{display:none}
+  .del{font-family:inherit;font-size:19px;line-height:1;color:var(--grey);background:none;
+       border:1px solid transparent;cursor:pointer;padding:6px 0;width:34px}
+  .del:hover{color:var(--warn);border-color:var(--hair)}
+
+  @media (max-width:680px){
+    .head{display:none}
+    .row{grid-template-columns:1fr;gap:8px;padding:14px 0;position:relative}
+    .row .clbl{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+               color:var(--grey);font-weight:bold;margin-bottom:4px}
+    .del{position:absolute;top:10px;right:0;width:30px}
+  }
+
+  .addbar{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .ghost{font-family:inherit;font-size:14px;padding:9px 16px;border:1px solid var(--ink);
+         background:transparent;color:var(--ink);cursor:pointer;border-radius:0}
+  .ghost:hover{background:var(--ink);color:#fff}
+  .linky{font-family:inherit;font-size:13.5px;background:none;border:0;color:var(--mid);
+         text-decoration:underline;cursor:pointer;padding:0}
+  .linky:hover{color:var(--ink)}
+
+  /* ---- status ---- */
+  .status{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px}
+  .tile{border:1px solid var(--hair);padding:11px 13px;background:var(--panel)}
+  .tile .t{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);
+           font-weight:bold;margin-bottom:5px}
+  .tile .n{font-size:23px;line-height:1;font-weight:bold}
+  .tile .m{font-size:12px;margin-top:5px;line-height:1.35;color:var(--mid)}
+  .tile.ok{border-left:3px solid var(--ok)}
+  .tile.warn{border-left:3px solid var(--warn);background:var(--soft)}
+  .tile.warn .m{color:var(--warn)}
+  .tile.idle{border-left:3px solid var(--hair)}
+
+  .total{margin-top:13px;padding-top:12px;border-top:1px solid var(--hair);font-size:14px}
+  .total b{font-size:16px}
+  .total .flag{color:var(--warn)}
+  .total .good{color:var(--ok)}
+
+  .issues{margin:12px 0 0;padding:0;list-style:none}
+  .issues li{font-size:13.5px;color:var(--warn);padding:3px 0 3px 15px;position:relative}
+  .issues li:before{content:"\2022";position:absolute;left:2px}
+
+  /* ---- paste box ---- */
+  .paste{display:none;margin-top:14px}
+  .paste.on{display:block}
+  .paste textarea{min-height:120px;font-size:14px;line-height:1.45;resize:vertical}
+  .paste .hint{font-size:13px;color:var(--grey);margin:7px 0 9px}
+
+  /* ---- bottom bar ---- */
+  .bar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);padding:11px 20px;
+       display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .bar button{font-family:inherit;font-size:14px;font-weight:bold;padding:10px 20px;
+       border:1px solid #fff;background:transparent;color:#fff;cursor:pointer;border-radius:0}
+  .bar button.primary{background:#fff;color:var(--ink)}
+  .bar button:hover{opacity:.82}
+  .bar .msg{color:#C9C9C9;font-size:12.5px;min-width:130px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="panel">
+    <h1>Your LCP evaluators</h1>
+    <p class="sub">The people who will give you feedback on the Leadership Circle Profile.</p>
+    <div class="hr"></div>
+    <p>Add everyone you want to hear from, then press <b>Download the list</b> at the bottom and
+      send the file back to your coach. That is all you need to do here.</p>
+    <p>Each of them gets a short online questionnaire. <b>Their answers are anonymous.</b> You see
+      the results grouped by relationship, never by name, and a group is only shown separately when
+      enough people in it respond. That is why the numbers below matter: if you name only two
+      peers, you lose the peer view altogether.</p>
+    <p>Pick people who see you work and will tell you the truth, not only the ones who like you.
+      Nothing is sent from this page. It stays in your browser until you download the file.</p>
+
+    <div class="me">
+      <label><span class="lbl">Your name</span><input type="text" id="me_name"></label>
+      <label><span class="lbl">Your email</span><input type="email" id="me_email"></label>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Where you stand</h2>
+    <div class="status" id="status"></div>
+    <div class="total" id="total"></div>
+    <ul class="issues" id="issues"></ul>
+  </div>
+
+  <div class="panel">
+    <h2>Your evaluators</h2>
+    <div class="head">
+      <span>Name</span><span>Relationship to you</span><span>Email</span><span></span>
+    </div>
+    <div id="rows"></div>
+    <div class="addbar">
+      <button class="ghost" id="btnAdd">Add a person</button>
+      <button class="ghost" id="btnAdd5">Add five</button>
+      <button class="linky" id="btnPasteToggle">Paste a list instead</button>
+    </div>
+
+    <div class="paste" id="pasteBox">
+      <p class="hint">Paste from a spreadsheet or an email, one person per line. Name and email on
+        each line, separated by a tab or a comma. If you include the relationship it will be picked
+        up, otherwise set it after.</p>
+      <textarea id="pasteText" placeholder="Laila Abdel Aziz&#9;Peer&#9;laila@example.com&#10;Tarek Hassan&#9;tarek@example.com"></textarea>
+      <div class="addbar">
+        <button class="ghost" id="btnPasteAdd">Add these people</button>
+        <button class="linky" id="btnPasteCancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bar">
+  <button id="btnDownload" class="primary">Download the list</button>
+  <button id="btnCopy">Copy instead</button>
+  <button id="btnClear">Clear</button>
+  <span class="msg" id="msg"></span>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============================================================
+     SETTINGS. Change these and nothing else needs touching.
+     min   = how many this group needs before it is reported separately
+     solo  = true for groups that are reported even with one person
+     opt   = true if leaving the group empty is fine
+     ============================================================ */
+  var MIN_TOTAL = 10;
+  var GROUPS = [
+    {key:"Boss",          label:"Boss",           min:1, solo:true,  opt:false},
+    {key:"Boss's Boss",   label:"Boss's Boss",    min:1, solo:true,  opt:true },
+    {key:"Peer",          label:"Peers",          min:3, solo:false, opt:false},
+    {key:"Direct Report", label:"Direct Reports", min:3, solo:false, opt:false},
+    {key:"Other",         label:"Other",          min:3, solo:false, opt:true }
+  ];
+  var STARTING_ROWS = 12;
+  var KEY = "pcc_lcp_evaluators_v1";
+
+  var el = function(id){ return document.getElementById(id); };
+  var rowsBox = el("rows");
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  /* ---------- rows ---------- */
+  function makeRow(data){
+    data = data || {};
+    var r = document.createElement("div");
+    r.className = "row";
+    var opts = GROUPS.map(function(g){
+      var sel = (data.rel === g.key) ? " selected" : "";
+      return '<option value="' + g.key + '"' + sel + '>' + g.key + '</option>';
+    }).join("");
+    r.innerHTML =
+      '<div><span class="clbl">Name</span>' +
+        '<input type="text" data-f="name" autocomplete="off"></div>' +
+      '<div><span class="clbl">Relationship to you</span><select data-f="rel">' +
+        '<option value=""' + (data.rel ? "" : " selected") + '>Choose one</option>' +
+        opts + '</select></div>' +
+      '<div><span class="clbl">Email</span>' +
+        '<input type="email" data-f="email" autocomplete="off"></div>' +
+      '<button class="del" type="button" title="Remove this person" ' +
+        'aria-label="Remove this person">&times;</button>';
+    r.querySelector('[data-f=name]').value  = data.name  || "";
+    r.querySelector('[data-f=email]').value = data.email || "";
+    r.querySelector(".del").addEventListener("click", function(){
+      r.parentNode.removeChild(r);
+      if(!rowsBox.querySelector(".row")) addRows(1);
+      refresh();
+    });
+    rowsBox.appendChild(r);
+    return r;
+  }
+  function addRows(n, data){
+    for(var i=0;i<n;i++) makeRow(data && data[i]);
+  }
+
+  function readRows(){
+    return Array.prototype.slice.call(rowsBox.querySelectorAll(".row")).map(function(r){
+      return {
+        node:  r,
+        name:  r.querySelector('[data-f=name]').value.trim(),
+        rel:   r.querySelector('[data-f=rel]').value,
+        email: r.querySelector('[data-f=email]').value.trim()
+      };
+    });
+  }
+  function filled(list){
+    return list.filter(function(p){ return p.name || p.email; });
+  }
+
+  /* ---------- status ---------- */
+  function refresh(){
+    var all  = readRows();
+    var used = filled(all);
+    var counts = {}, i;
+    GROUPS.forEach(function(g){ counts[g.key] = 0; });
+    used.forEach(function(p){ if(p.rel) counts[p.rel]++; });
+
+    /* tiles */
+    el("status").innerHTML = GROUPS.map(function(g){
+      var n = counts[g.key], cls = "idle", m = "";
+      if(n === 0){
+        if(g.opt){ cls = "idle"; m = "Not used."; }
+        else { cls = "warn"; m = g.solo ? "Add this person." :
+               "Add at least " + g.min + "."; }
+      } else if(g.solo){
+        cls = "ok";
+        m = (n > 1) ? "More than one. Fine if that is real." : "Good.";
+      } else if(n < g.min){
+        cls = "warn";
+        m = "Needs " + g.min + " or this group is not reported on its own.";
+      } else {
+        cls = "ok"; m = "Good.";
+      }
+      return '<div class="tile ' + cls + '"><div class="t">' + g.label + '</div>' +
+             '<div class="n">' + n + '</div><div class="m">' + m + '</div></div>';
+    }).join("");
+
+    /* total */
+    var n = used.length;
+    var cls = (n >= MIN_TOTAL) ? "good" : "flag";
+    var tail = (n >= MIN_TOTAL)
+      ? "That is enough."
+      : "You need at least " + MIN_TOTAL + ". " + (MIN_TOTAL - n) + " to go.";
+    el("total").innerHTML = "<b>" + n + "</b> " + (n === 1 ? "person" : "people") +
+                            " named. <span class=\"" + cls + "\">" + tail + "</span>";
+
+    /* issues */
+    var seen = {}, dupes = {}, issues = [];
+    used.forEach(function(p){
+      var k = p.email.toLowerCase();
+      if(!k) return;
+      if(seen[k]) dupes[k] = true;
+      seen[k] = true;
+    });
+    all.forEach(function(p){
+      var box = p.node.querySelector('[data-f=email]');
+      var bad = (p.email && !EMAIL_RE.test(p.email)) || (p.email && dupes[p.email.toLowerCase()]);
+      box.className = bad ? "bad" : "";
+    });
+    var noRel  = used.filter(function(p){ return !p.rel; }).length;
+    var noMail = used.filter(function(p){ return !p.email; }).length;
+    var noName = used.filter(function(p){ return !p.name; }).length;
+    var badMail = used.filter(function(p){ return p.email && !EMAIL_RE.test(p.email); }).length;
+    var dupCount = Object.keys(dupes).length;
+
+    if(noName)  issues.push(noName + (noName === 1 ? " person has" : " people have") + " no name.");
+    if(noRel)   issues.push(noRel + (noRel === 1 ? " person has" : " people have") +
+                            " no relationship set.");
+    if(noMail)  issues.push(noMail + (noMail === 1 ? " person has" : " people have") + " no email.");
+    if(badMail) issues.push(badMail + " email address" + (badMail === 1 ? " does not" : "es do not") +
+                            " look right.");
+    if(dupCount)issues.push(dupCount + " email address" + (dupCount === 1 ? " is" : "es are") +
+                            " used more than once.");
+    el("issues").innerHTML = issues.map(function(s){ return "<li>" + s + "</li>"; }).join("");
+
+    save();
+  }
+
+  /* ---------- storage ---------- */
+  var t = null;
+  function flash(s){
+    el("msg").textContent = s;
+    clearTimeout(t); t = setTimeout(function(){ el("msg").textContent = ""; }, 2400);
+  }
+  function save(){
+    try{
+      localStorage.setItem(KEY, JSON.stringify({
+        me:{ name: el("me_name").value, email: el("me_email").value },
+        rows: readRows().map(function(p){
+          return { name:p.name, rel:p.rel, email:p.email };
+        })
+      }));
+    }catch(e){}
+  }
+  function load(){
+    var d = null;
+    try{ d = JSON.parse(localStorage.getItem(KEY) || "null"); }catch(e){}
+    if(!d || !d.rows || !d.rows.length) return false;
+    el("me_name").value  = (d.me && d.me.name)  || "";
+    el("me_email").value = (d.me && d.me.email) || "";
+    d.rows.forEach(function(p){ makeRow(p); });
+    return true;
+  }
+
+  /* ---------- CSV ---------- */
+  function cell(s){
+    s = String(s == null ? "" : s);
+    return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+  function slug(s){
+    return (s || "Participant").replace(/[^A-Za-z0-9]+/g, "_").replace(/^_+|_+$/g, "")
+           .slice(0, 40) || "Participant";
+  }
+  function buildCsv(){
+    var order = {};
+    GROUPS.forEach(function(g, i){ order[g.key] = i; });
+    var people = filled(readRows()).slice().sort(function(a, b){
+      var x = (a.rel in order) ? order[a.rel] : 99;
+      var y = (b.rel in order) ? order[b.rel] : 99;
+      return x - y;
+    });
+    var lines = ["Name,Relationship,Email"];
+    people.forEach(function(p){
+      lines.push([cell(p.name), cell(p.rel), cell(p.email)].join(","));
+    });
+    return { text: lines.join("\r\n") + "\r\n", count: people.length };
+  }
+  function stamp(){
+    var d = new Date(), p = function(n){ return (n < 10 ? "0" : "") + n; };
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+
+  el("btnDownload").addEventListener("click", function(){
+    var csv = buildCsv();
+    if(!csv.count){ flash("Nothing to download yet"); return; }
+    /* the BOM is what makes Excel read Arabic names correctly */
+    var blob = new Blob(["﻿" + csv.text], { type: "text/csv;charset=utf-8;" });
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement("a");
+    a.href = url;
+    a.download = "LCP_Evaluators_" + slug(el("me_name").value) + "_" + stamp() + ".csv";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+    flash("Downloaded");
+  });
+
+  el("btnCopy").addEventListener("click", function(){
+    var csv = buildCsv();
+    if(!csv.count){ flash("Nothing to copy yet"); return; }
+    var done = function(){ flash("Copied, now paste it into an email"); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(csv.text).then(done, fallback);
+    } else { fallback(); }
+    function fallback(){
+      var ta = document.createElement("textarea");
+      ta.value = csv.text;
+      ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy"); done(); }
+      catch(e){ flash("Could not copy, use Download"); }
+      document.body.removeChild(ta);
+    }
+  });
+
+  el("btnClear").addEventListener("click", function(){
+    if(!window.confirm("Clear the whole list on this device? This cannot be undone.")) return;
+    el("me_name").value = ""; el("me_email").value = "";
+    rowsBox.innerHTML = "";
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    addRows(STARTING_ROWS);
+    refresh();
+    flash("Cleared");
+  });
+
+  /* ---------- paste import ---------- */
+  function matchRel(s){
+    var v = s.toLowerCase().replace(/[^a-z]/g, "");
+    if(!v) return "";
+    if(v.indexOf("bossboss") === 0 || v === "bosssboss" || v.indexOf("skip") === 0 ||
+       v.indexOf("grandboss") === 0) return "Boss's Boss";
+    if(v.indexOf("boss") === 0 || v.indexOf("manager") === 0 ||
+       v.indexOf("linemanager") === 0) return "Boss";
+    if(v.indexOf("peer") === 0 || v.indexOf("colleague") === 0) return "Peer";
+    if(v.indexOf("direct") === 0 || v.indexOf("report") === 0 ||
+       v.indexOf("team") === 0) return "Direct Report";
+    if(v.indexOf("other") === 0) return "Other";
+    return "";
+  }
+  function parsePaste(text){
+    var out = [];
+    text.split(/\r?\n/).forEach(function(line){
+      if(!line.trim()) return;
+      var parts = line.split(/\t|;|,/).map(function(s){ return s.trim(); })
+                      .filter(function(s){ return s.length; });
+      if(!parts.length) return;
+      var email = "", rel = "", names = [];
+      parts.forEach(function(p){
+        if(!email && EMAIL_RE.test(p)){ email = p; return; }
+        if(!rel){ var m = matchRel(p); if(m){ rel = m; return; } }
+        names.push(p);
+      });
+      /* a bare angle-bracket address, as Outlook writes it */
+      if(!email){
+        var m2 = line.match(/<([^>]+@[^>]+)>/);
+        if(m2 && EMAIL_RE.test(m2[1])){
+          email = m2[1];
+          names = names.map(function(s){ return s.replace(/<[^>]*>/g, "").trim(); })
+                       .filter(Boolean);
+        }
+      }
+      var name = names.join(" ").replace(/^["']|["']$/g, "").trim();
+      if(name || email) out.push({ name:name, rel:rel, email:email });
+    });
+    return out;
+  }
+  el("btnPasteToggle").addEventListener("click", function(){
+    el("pasteBox").classList.toggle("on");
+    if(el("pasteBox").classList.contains("on")) el("pasteText").focus();
+  });
+  el("btnPasteCancel").addEventListener("click", function(){
+    el("pasteBox").classList.remove("on"); el("pasteText").value = "";
+  });
+  el("btnPasteAdd").addEventListener("click", function(){
+    var people = parsePaste(el("pasteText").value);
+    if(!people.length){ flash("Nothing recognised there"); return; }
+    /* drop any completely empty rows before appending */
+    readRows().forEach(function(p){
+      if(!p.name && !p.email && !p.rel) p.node.parentNode.removeChild(p.node);
+    });
+    people.forEach(function(p){ makeRow(p); });
+    addRows(2);
+    el("pasteText").value = "";
+    el("pasteBox").classList.remove("on");
+    refresh();
+    flash("Added " + people.length);
+  });
+
+  /* ---------- wiring ---------- */
+  el("btnAdd").addEventListener("click", function(){
+    var r = makeRow(); refresh();
+    r.querySelector('[data-f=name]').focus();
+  });
+  el("btnAdd5").addEventListener("click", function(){
+    addRows(5); refresh();
+  });
+  rowsBox.addEventListener("input",  refresh);
+  rowsBox.addEventListener("change", refresh);
+  el("me_name").addEventListener("input", save);
+  el("me_email").addEventListener("input", save);
+
+  if(!load()) addRows(STARTING_ROWS);
+  refresh();
+})();
+</script>
+</body>
+</html>
